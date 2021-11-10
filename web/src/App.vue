@@ -1,13 +1,24 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + Vite" />
+  <ul class="test">
+    <li v-for="(item,index) in msg" :key="index">
+      {{item}}
+    </li>
+  </ul>
 </template>
+<script setup>
+import {ref,onMounted} from "vue";
+const msg = ref(['1'])
+const socket = new WebSocket('ws://localhost:5002');
+socket.addEventListener('open', function (event) {
+    socket.send('Hello Server!');
+});
+
+// Listen for messages
+socket.addEventListener('message', function (event) {
+    console.log('Message from server ', event.data);
+});
+
+</script>
 
 <style>
 #app {
@@ -17,5 +28,10 @@ import HelloWorld from './components/HelloWorld.vue'
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.test{
+  width: 40%;
+  margin: auto;
+  text-align: left;
 }
 </style>
