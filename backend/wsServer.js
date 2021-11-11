@@ -1,10 +1,24 @@
 const webSocket = require("ws").Server
 const wss  = new webSocket({port:5002})
 
+
+
 wss.on('connection',ws => {
+  console.log("ws",ws)
+  
   ws.on('message',msg => {
     msg = msg.toString()
-    console.log("msg",msg)
+    try{
+      msg = JSON.parse(msg)
+      ws.roomid = msg.roomid
+      wss.clients.forEach(client => {
+        
+        if(client.roomid === msg.roomid){
+          client.send(JSON.stringify(msg))
+        }
+      })
+    }catch{
+      
+    }
   })
-  ws.send('hello')
 })
