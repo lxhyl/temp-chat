@@ -2,10 +2,7 @@ const webSocket = require("ws").Server
 const wss  = new webSocket({port:5002})
 
 
-
 wss.on('connection',ws => {
-  console.log("ws",ws)
-  
   ws.on('message',msg => {
     msg = msg.toString()
     try{
