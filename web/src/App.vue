@@ -10,7 +10,7 @@
       >{{ item }}</p>
       <p class="input-box">
         <span>[{{ nowTime }}@{{ username }}]#&nbsp;</span>
-        <input ref="input" @blur="onblur" />
+        <input ref="input" @keyup.enter="sendMsg" @blur="onblur" />
       </p>
     </div>
   </div>
@@ -41,7 +41,8 @@ if (!roomid) {
 }
 let username = ref("");
 
-const socket = new WebSocket("ws://localhost:5002");
+// const socket = new WebSocket("ws://localhost:5002");
+const socket = new WebSocket("ws://114.132.210.203:5002")
 socket.addEventListener("open", function (event) { });
 
 // Listen for messages
@@ -54,8 +55,6 @@ socket.addEventListener("message", function (event) {
 });
 
 const sendMsg = (e) => {
-  if (e.code !== "Enter") return;
-  console.log('username',username.value)
   const type = "text",
     from = username.value,
     date = Date.now(),
@@ -91,7 +90,6 @@ function onblur(e) {
 onMounted(() => {
   nextTick(() => {
     input.value.focus();
-    input.value.addEventListener("keydown", sendMsg);
   });
 });
 
@@ -101,9 +99,11 @@ onMounted(() => {
     const name =  prompt("怎么称呼你？", "")
     console.log("name",name)
     username.value = name
-    localStorage.setItem("username", username);
+    localStorage.setItem("username", username.value);
+  }else{
+  console.log("lcUsername",lcUsername)
+  username.value = lcUsername
   }
-  username.value = lcUsername;
   msg.value.push(`Welcome, ${username.value}`);
 });
 </script>
