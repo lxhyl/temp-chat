@@ -16,6 +16,7 @@
   </div>
 </template>
 <script setup>
+
 import { ref, onMounted, nextTick } from "vue";
 import format from "./utils/date";
 
@@ -41,9 +42,14 @@ if (!roomid) {
 }
 let username = ref("");
 
-// const socket = new WebSocket("ws://localhost:5002");
+// const socket = new WebSocket("ws://localhost:5002")
 const socket = new WebSocket("ws://114.132.210.203:5002")
-socket.addEventListener("open", function (event) { });
+socket.addEventListener("open", function (event) { 
+   socket.send(JSON.stringify({
+     roomid,
+     type:'connect'
+   }))
+});
 
 // Listen for messages
 socket.addEventListener("message", function (event) {
