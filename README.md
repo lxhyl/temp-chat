@@ -16,11 +16,11 @@
 每条消息为`json`格式,字段如下（暂定）:  
 ```js
 {
-  roomid:'test'               // 房间id
-  type:'text'               // 消息类型，当前先支持文本消息（text）
-  data:'hello'              // 消息内容
-  from:'lxhyl',             // 谁发送的
-  date:1636574963351        // 发送消息的时间戳
+  roomid:'test'  String       // 房间id
+  type:'text'    String       // 消息类型，当前先支持文本消息（text）
+  data:'hello'   String       // 消息内容
+  from:'lxhyl',  String       // 谁发送的
+  date:1636574963351  Int     // 发送消息的时间戳
 }
 ```
 
@@ -29,13 +29,14 @@
 # v0.1说明
 
 ws地址`114.132.210.203:5002`  
-发送消息的字段：`roomid`由客户端自定义。
+发送消息的字段：`roomid`由客户端自定义且是必须的，其他字段和上述一致。
 
-当服务器收到消息时，会将这条消息广播给所有`roomid`和此消息一致的`webSocket`连接。
+当服务器收到消息时，会将这条消息广播给所有`roomid`和此消息`roomid`一致的`webSocket`连接。
 
 
 **测试网页端**   
 
 `http://114.132.210.203/chat/`
-  
 
+我的客户端实现是，直接进入此网站，会进入默认房间.     
+进入其他房间只需要给url加上room参数，eg:`http://114.132.210.203/chat/?room=test`会进入test房间。
