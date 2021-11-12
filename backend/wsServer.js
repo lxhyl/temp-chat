@@ -19,8 +19,8 @@ wss.on('connection', ws => {
           }
         })
       }
-    } catch {
-
+    } catch (err){
+       console.error("err",err)
     }
   })
 })
