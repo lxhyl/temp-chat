@@ -1,8 +1,8 @@
 //
 //  RoundedCornersView.swift
-//  test
+//  TempChat
 //
-//  Created by candy on 2021/11/11.
+//  Created by candy on 2021/11/12.
 //
 
 import SwiftUI

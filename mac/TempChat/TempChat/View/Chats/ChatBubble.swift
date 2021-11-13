@@ -1,8 +1,8 @@
 //
 //  ChatBubble.swift
-//  test
+//  TempChat
 //
-//  Created by candy on 2021/11/11.
+//  Created by candy on 2021/11/12.
 //
 
 import SwiftUI
@@ -19,15 +19,15 @@ struct ChatBubble: View {
             .background(RoundedCornersView(color: .blue, tl: 15, tr: 15, bl: self.bl, br: self.br))
             .foregroundColor(.white)
     }
-    init(isFromCurrentUser: Bool) {
-        if isFromCurrentUser {
-            bl = 15
-            br = 0
-        } else {
-            bl = 0
-            br = 15
+        init(isFromCurrentUser: Bool) {
+            if isFromCurrentUser {
+                bl = 15
+                br = 0
+            } else {
+                bl = 0
+                br = 15
+            }
         }
-    }
 }
 
 struct ChatBubble_Previews: PreviewProvider {
