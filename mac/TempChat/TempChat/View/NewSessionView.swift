@@ -18,11 +18,6 @@ struct NewSessionView: View {
                 TextField("聊天昵称:", text: $name, prompt: Text("require"))
                 
             }
-            .onSubmit{
-                print(roomId)
-                print(name)
-            }
-            
             Button(action: {
                 join(roomId,name)
             }, label: {

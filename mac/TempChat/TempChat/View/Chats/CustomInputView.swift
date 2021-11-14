@@ -18,10 +18,13 @@ struct CustomInputView: View {
                     text = ""
                 }
             Button(action: {sendAction(text);text = ""}, label: {
-                VStack(content: {
-                    Image(systemName: "arrow.up.circle")
-                    Text("send")
-                }).clipShape(Circle())
+                VStack{
+                    Spacer()
+                        
+                        Image(systemName: "arrow.up.circle")
+                    Spacer()
+                }
+                
                     
             })
         }

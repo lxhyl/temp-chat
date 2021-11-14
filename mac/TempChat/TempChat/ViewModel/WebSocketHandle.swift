@@ -112,6 +112,7 @@ class ChatRoom: Identifiable, ObservableObject {
 
 class ViewModel: ObservableObject {
     @Published private(set) var chatRooms: [ChatRoom] = []
+    @Published var isChatActive: [Bool] = []
     init() { }
     func vJoinRoom(roomId id: String, currentUserName: String) {
         if id == "" || currentUserName == "" {
@@ -125,6 +126,7 @@ class ViewModel: ObservableObject {
         room.joinRoom()
         room.RecMsg()
         chatRooms.append(room)
+        isChatActive.append(true)
     }
 }
 
