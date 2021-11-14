@@ -8,24 +8,36 @@
 import SwiftUI
 
 struct MainView: View {
-    @ObservedObject var viewModel: WebSocketHandle
+    @ObservedObject var viewModel: ViewModel = ViewModel()
     var body: some View {
         NavigationView {
             VStack {
-                NavigationLink(destination: NewSessionView(join: viewModel.joinChat), label: {
-                    Label("新增会话", systemImage: "plus.rectangle.fill.on.rectangle.fill")
-                })
-                List(viewModel.chatTable, id: \.self) { item in
-                    NavigationLink(destination: ChatWindowView()) {
-                        Label(item, systemImage: "person.3.fill")
+                Button("添加聊天", action: {
+                    if let n = viewModel.isChatActive.firstIndex(of: true){
+                        viewModel.isChatActive[n] = false
                     }
+                }).padding(.top)
+                List(0..<viewModel.chatRooms.count, id: \.self) { n in
+                    NavigationLink(destination: ChatWindowView(chatRoom: viewModel.chatRooms[n]), isActive: $viewModel.isChatActive[n]) {
+                        Label(viewModel.chatRooms[n].id, systemImage: "person.3.fill")
+                    }
+                    .deleteDisabled(true)
+                    .onDeleteCommand(perform: {
+                        print("delete")
+                    })
                 }
                 
             }
-            NewSessionView(join: viewModel.joinChat)
+            if !viewModel.isChatActive.contains(true) {
+                NewSessionView(join: viewModel.vJoinRoom)
+            }
+            
         }
     }
+    
+    
 }
+
 /*
 struct MainView_Previews: PreviewProvider {
     

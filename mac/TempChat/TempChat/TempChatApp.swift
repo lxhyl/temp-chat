@@ -12,8 +12,7 @@ struct TempChatApp: App {
     
     var body: some Scene {
         WindowGroup {
-            let webSoketHandle = WebSocketHandle()
-            MainView(viewModel: webSoketHandle).frame(width: 500, height: 500)
+            MainView().frame(minWidth: 400, minHeight: 400)
         }
     }
 }
