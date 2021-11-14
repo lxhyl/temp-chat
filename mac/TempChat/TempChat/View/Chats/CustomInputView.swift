@@ -9,15 +9,15 @@ import SwiftUI
 
 struct CustomInputView: View {
     @State var text: String = ""
-    var sendAction: () -> Void = sendMsg
-    var action: () -> Void = sendMsg
+    var sendAction: (String) -> Void
     var body: some View {
         HStack{
             TextEditor(text: $text)
                 .onSubmit {
-                    sendAction()
+                    sendAction(text)
+                    text = ""
                 }
-            Button(action: sendAction, label: {
+            Button(action: {sendAction(text);text = ""}, label: {
                 VStack(content: {
                     Image(systemName: "arrow.up.circle")
                     Text("send")
@@ -29,11 +29,9 @@ struct CustomInputView: View {
     }
     
 }
-func sendMsg(){
-    print("text")
-}
+/*
 struct CustomInputView_Previews: PreviewProvider {
     static var previews: some View {
         CustomInputView(text: "123")
     }
-}
+}*/

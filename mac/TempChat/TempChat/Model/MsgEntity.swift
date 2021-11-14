@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MsgEntity: Codable {
+struct MsgEntity: Codable{
     var roomid: String
     var type: String
     var data: String
