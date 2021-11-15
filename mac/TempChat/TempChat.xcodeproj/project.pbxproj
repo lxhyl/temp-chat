@@ -13,7 +13,6 @@
 		36064E20273EA719002471B7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36064E1F273EA719002471B7 /* Preview Assets.xcassets */; };
 		36064E2A273EABC8002471B7 /* ChatBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36064E29273EABC8002471B7 /* ChatBubble.swift */; };
 		36064E2C273EBC74002471B7 /* RoundedCornersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36064E2B273EBC74002471B7 /* RoundedCornersView.swift */; };
-		36064E2E273EBD14002471B7 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36064E2D273EBD14002471B7 /* MessageView.swift */; };
 		36064E31273EBD65002471B7 /* CustomInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36064E30273EBD65002471B7 /* CustomInputView.swift */; };
 		36064E33273EBDA4002471B7 /* ChatWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36064E32273EBDA4002471B7 /* ChatWindowView.swift */; };
 		36064E35273EBED8002471B7 /* NewSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36064E34273EBED8002471B7 /* NewSessionView.swift */; };
@@ -30,7 +29,6 @@
 		36064E21273EA719002471B7 /* TempChat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TempChat.entitlements; sourceTree = "<group>"; };
 		36064E29273EABC8002471B7 /* ChatBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubble.swift; sourceTree = "<group>"; };
 		36064E2B273EBC74002471B7 /* RoundedCornersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornersView.swift; sourceTree = "<group>"; };
-		36064E2D273EBD14002471B7 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		36064E30273EBD65002471B7 /* CustomInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInputView.swift; sourceTree = "<group>"; };
 		36064E32273EBDA4002471B7 /* ChatWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWindowView.swift; sourceTree = "<group>"; };
 		36064E34273EBED8002471B7 /* NewSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionView.swift; sourceTree = "<group>"; };
@@ -102,7 +100,6 @@
 			children = (
 				36064E29273EABC8002471B7 /* ChatBubble.swift */,
 				36064E2B273EBC74002471B7 /* RoundedCornersView.swift */,
-				36064E2D273EBD14002471B7 /* MessageView.swift */,
 				36064E30273EBD65002471B7 /* CustomInputView.swift */,
 				36064E32273EBDA4002471B7 /* ChatWindowView.swift */,
 			);
@@ -203,7 +200,6 @@
 				36A393A9273EC6E100C6C3CD /* WebSocketHandle.swift in Sources */,
 				36064E33273EBDA4002471B7 /* ChatWindowView.swift in Sources */,
 				36064E2C273EBC74002471B7 /* RoundedCornersView.swift in Sources */,
-				36064E2E273EBD14002471B7 /* MessageView.swift in Sources */,
 				36A393A6273EC3F500C6C3CD /* MsgEntity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,6 +327,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = TempChat/TempChat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -339,6 +336,7 @@
 				DEVELOPMENT_TEAM = 6DZ9ST2462;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -357,6 +355,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = TempChat/TempChat.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -365,6 +364,7 @@
 				DEVELOPMENT_TEAM = 6DZ9ST2462;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
