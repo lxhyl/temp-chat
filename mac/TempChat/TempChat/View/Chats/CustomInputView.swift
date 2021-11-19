@@ -17,16 +17,14 @@ struct CustomInputView: View {
                     sendAction(text)
                     text = ""
                 }
-            Button(action: {sendAction(text);text = ""}, label: {
-                VStack{
-                    Spacer()
-                        
-                        Image(systemName: "arrow.up.circle")
-                    Spacer()
+            ZStack {
+                Color.blue
+                Image(systemName: "arrow.up.circle.fill").font(.largeTitle).imageScale(.large)
+            }.frame(maxWidth: 100)
+                .onTapGesture {
+                    sendAction(text)
+                    text = ""
                 }
-                
-                    
-            })
         }
         
     }

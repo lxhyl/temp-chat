@@ -11,20 +11,18 @@ struct NewSessionView: View {
     @State private var roomId: String = "lxhyl"
     @State private var name: String = ""
     var join: (String, String) -> Void
+    
     var body: some View {
         VStack {
             Form {
-                TextField("房间名:", text: $roomId, prompt: Text("require"))
-                TextField("聊天昵称:", text: $name, prompt: Text("require"))
-                
+                TextField("房间名:", text: $roomId)
+                TextField("聊天昵称:", text: $name)
             }
-            Button(action: {
-                join(roomId,name)
-            }, label: {
+            Button(action: {join(roomId,name)}, label: {
                 Text("加入")
             })
         }
-        .padding()
+        .navigationTitle("加入房间")
     }
 }
 /*

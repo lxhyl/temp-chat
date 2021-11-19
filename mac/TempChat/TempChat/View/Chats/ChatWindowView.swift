@@ -11,7 +11,7 @@ struct ChatWindowView: View {
     
     @ObservedObject var chatRoom: ChatRoom
     @Namespace var bottomID
-    
+    @State var searchText = ""
     var body: some View {
         VStack {
             ScrollViewReader { proxy in
@@ -24,19 +24,14 @@ struct ChatWindowView: View {
                                     ChatBubble(isFromCurrentUser: true, msg: chatRoom.messages[n].data)
                                         .padding(.horizontal)
                                         .onAppear(perform: {
-                                            withAnimation(.easeIn) {
-                                                proxy.scrollTo(bottomID,anchor: UnitPoint(x: 0.5, y: 4))
-                                            }
+                                                proxy.scrollTo(bottomID,anchor: UnitPoint(x: 0.5, y: 1))
                                         })
                                 } else {
                                     ChatBubble(isFromCurrentUser: false, msg: chatRoom.messages[n].data)
                                         .padding(.horizontal)
                                         .id(bottomID)
                                         .onAppear(perform: {
-                                            print("scroll to buttom")
-                                            withAnimation {
-                                                proxy.scrollTo(bottomID,anchor: UnitPoint(x: 0.5, y: 4))
-                                            }
+                                                proxy.scrollTo(bottomID,anchor: UnitPoint(x: 0.5, y: 1))
                                         })
                                     Spacer()
                                 }
@@ -49,9 +44,11 @@ struct ChatWindowView: View {
             
             CustomInputView(sendAction: chatRoom.sendMsg)
                 .border(.secondary)
-                .frame(minHeight: 100)
+                .frame(height: 100)
         }
-        .padding(.top)
+        .navigationTitle(chatRoom.id)
+        .navigationSubtitle("在线")
+        .searchable(text: $searchText)
     }
 }
 /*
