@@ -13,28 +13,30 @@ struct CustomInputView: View {
     var body: some View {
         HStack{
             TextEditor(text: $text)
-                .onSubmit {
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+
+            ZStack {
+                Color.blue
+                Image(systemName: "arrow.up.circle.fill")
+                    .foregroundColor(.white).font(.largeTitle).imageScale(.large)
+
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+                .frame(maxWidth: 100)
+                .onTapGesture {
                     sendAction(text)
                     text = ""
                 }
-            Button(action: {sendAction(text);text = ""}, label: {
-                VStack{
-                    Spacer()
-                        
-                        Image(systemName: "arrow.up.circle")
-                    Spacer()
-                }
-                
-                    
-            })
         }
         
+        .padding(.horizontal,1)
+            
     }
     
 }
-/*
+
 struct CustomInputView_Previews: PreviewProvider {
     static var previews: some View {
-        CustomInputView(text: "123")
+        CustomInputView(text: "123",sendAction: {_ in })
     }
-}*/
+}

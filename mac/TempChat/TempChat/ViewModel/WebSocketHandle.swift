@@ -6,84 +6,76 @@
 //
 
 import Foundation
+import OSLog
+
 
 class WebSocketDelegate: NSObject, URLSessionWebSocketDelegate {
+    var isConnected: Bool = false
+    init(isconnect: inout Bool) {
+        self.isConnected = isconnect
+        super.init()
+        
+    }
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol1: String?) {
-        print("Web socket did connect:\(String(describing: protocol1))")
+        isConnected = true
+        os_log("连接服务器成功")
     }
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
-        print("Web socket did disconnect")
+        isConnected = false
+        os_log("连接服务器失败or断开链接")
     }
-    
-
-}
-
-class WebSocketHandle {
-    private let url = URL(fileURLWithPath: "ws://114.132.210.203:5002")
-    //private let url = URL(fileURLWithPath: "ws://127.0.0.1")
-    private let urlSession = URLSession(configuration: .default, delegate: WebSocketDelegate(), delegateQueue: OperationQueue())
-    var WSTask: URLSessionWebSocketTask?
-    init(){
-    }
-    
-    func connect() {
-        WSTask = urlSession.webSocketTask(with: url)
-        WSTask?.resume()
-    }
-    
 }
 
 class ChatRoom: Identifiable, ObservableObject {
+    
+    private let urlSession: URLSession
+    static private let url = URL(fileURLWithPath: "ws://114.132.210.203:5002")
+//    static private let url = URL(fileURLWithPath: "ws://127.0.0.1")
+    
     private(set) var id: String
     private(set) var currentUserName: String
+    private var webSocket: URLSessionWebSocketTask
+    var webSocketDelegate: WebSocketDelegate
     @Published var messages: [MsgEntity] = []
+     var isConnected: Bool
     
-    var webSocketHandle: WebSocketHandle
     init(roomId: String, currentUserName: String) {
         self.id = roomId
         self.currentUserName = currentUserName
-        webSocketHandle = WebSocketHandle()
+        isConnected = true
+        webSocketDelegate = WebSocketDelegate(isconnect: &isConnected)
+        urlSession = URLSession(configuration: .default, delegate: webSocketDelegate, delegateQueue: OperationQueue())
+        webSocket = urlSession.webSocketTask(with: ChatRoom.url)
+        webSocket.resume()
     }
-    
     func joinRoom() {
-        webSocketHandle.connect()
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         let joinRoom = JoinRoom(roomid: id)
         let data = try! encoder.encode(joinRoom)
-        sendMsg(data: data)
+        sendMsgToJoinRoom(data: data)
     }
     func leaveRoom() {
-        webSocketHandle.WSTask?.cancel()
-        
+        webSocket.cancel()
     }
-    private func sendMsg(data: Data) {
+    private func sendMsgToJoinRoom(data: Data) {
         let message = URLSessionWebSocketTask.Message.data(data)
-        webSocketHandle.WSTask?.send(message, completionHandler: { error in
-            if let error = error {
-                print(error)
+        webSocket.send(message) { error in
+            if let _ = error {
+                self.webSocketDelegate.isConnected = false
             }
-        })
+        }
     }
     func sendMsg(msg: String) {
-        if msg == "" {
-            return
+        if msg == "" { return }
+        let message = URLSessionWebSocketTask.Message.data(msgEncode(msg: msg))
+        webSocket.send(message) { error in
+            if let _ = error { os_log("消息发送失败") }
         }
-        let date = Int(Date().timeIntervalSince1970*1000)
-        let msgEntity = MsgEntity(roomid: id, type: "text", data: msg, from: currentUserName, date: date)
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        let jsonMsg = try! encoder.encode(msgEntity)
-        let message = URLSessionWebSocketTask.Message.data(jsonMsg)
-        webSocketHandle.WSTask?.send(message, completionHandler: { error in
-            if let error = error {
-                print(error)
-            }
-        })
     }
     
     func RecMsg() {
-        webSocketHandle.WSTask?.receive() { result in
+        webSocket.receive() { [self] result in
             switch result {
             case .success(let msg):
                 switch msg {
@@ -91,13 +83,14 @@ class ChatRoom: Identifiable, ObservableObject {
                     print(datae)
                 case .string(let string):
                     DispatchQueue.main.async {
-                        self.messages.append(self.msgDecode(string.data(using: .utf8)!))
+                        messages.append(msgDecode(string.data(using: .utf8)!))
                     }
                 @unknown default:
-                    print("unknow fault")
+                    os_log("unknow fault")
                 }
-            case .failure(let error):
-                print(error)
+            case .failure:
+                webSocketDelegate.isConnected = false
+                return
             }
             self.RecMsg()
         }
@@ -108,23 +101,33 @@ class ChatRoom: Identifiable, ObservableObject {
         let msg = try! decoder.decode(MsgEntity.self, from: data)
         return msg
     }
+    func msgEncode(msg: String) -> Data{
+        let date = Int(Date().timeIntervalSince1970*1000)
+        let msgEntity = MsgEntity(roomid: id, type: "text", data: msg, from: currentUserName, date: date)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let jsonMsg = try! encoder.encode(msgEntity)
+        return jsonMsg
+    }
 }
 
 class ViewModel: ObservableObject {
-    @Published private(set) var chatRooms: [ChatRoom] = []
+    @Published var chatRooms: [ChatRoom] = []
     @Published var isChatActive: [Bool] = []
-    init() { }
+    @Published var isShowLog = false
+    @Published var logs: [String] = []
+    init() {
+    }
     func vJoinRoom(roomId id: String, currentUserName: String) {
         if id == "" || currentUserName == "" {
             return
         }
         if chatRooms.contains(where: { $0.id == id }) {
-            print("have same roodId")
             return
         }
         let room = ChatRoom(roomId: id, currentUserName: currentUserName)
-        room.joinRoom()
         room.RecMsg()
+        room.joinRoom()
         chatRooms.append(room)
         isChatActive.append(true)
     }
