@@ -15,39 +15,25 @@ struct ChatWindowView: View {
     var body: some View {
         VStack {
             ScrollViewReader { proxy in
-                ScrollView() {
+                ScrollView(.vertical) {
                     VStack{
                         ForEach(0..<chatRoom.messages.count, id: \.self){ n in
-                            HStack {
-                                if chatRoom.messages[n].from == chatRoom.currentUserName {
-                                    Spacer()
-                                    ChatBubble(isFromCurrentUser: true, msg: chatRoom.messages[n].data)
-                                        .padding(.horizontal)
-                                        .onAppear(perform: {
-                                                proxy.scrollTo(bottomID,anchor: UnitPoint(x: 0.5, y: 1))
-                                        })
-                                } else {
-                                    ChatBubble(isFromCurrentUser: false, msg: chatRoom.messages[n].data)
-                                        .padding(.horizontal)
-                                        .id(bottomID)
-                                        .onAppear(perform: {
-                                                proxy.scrollTo(bottomID,anchor: UnitPoint(x: 0.5, y: 1))
-                                        })
-                                    Spacer()
+                            let isCurrentUser =  chatRoom.messages[n].from == chatRoom.currentUserName
+                            ChatBubble(isCurrentUser, msg: chatRoom.messages[n].data,name: chatRoom.messages[n].from)
+                                .padding(.horizontal)
+                                .onAppear{
+                                        proxy.scrollTo(bottomID,anchor: UnitPoint(x: 0.5, y: 2))
                                 }
-                            }
                         }
                     }.id(bottomID)
-                    
                 }
             }
             
             CustomInputView(sendAction: chatRoom.sendMsg)
-                .border(.secondary)
                 .frame(height: 100)
         }
         .navigationTitle(chatRoom.id)
-        .navigationSubtitle("在线")
+        .navigationSubtitle(chatRoom.webSocketDelegate.isConnected ? "在线" : "离线")
         .searchable(text: $searchText)
     }
 }

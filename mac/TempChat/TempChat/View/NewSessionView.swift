@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NewSessionView: View {
-    @State private var roomId: String = "lxhyl"
+    @State private var roomId: String = ""
     @State private var name: String = ""
     var join: (String, String) -> Void
     
@@ -17,7 +17,7 @@ struct NewSessionView: View {
             Form {
                 TextField("房间名:", text: $roomId)
                 TextField("聊天昵称:", text: $name)
-            }
+            }.frame(maxWidth: 300)
             Button(action: {join(roomId,name)}, label: {
                 Text("加入")
             })

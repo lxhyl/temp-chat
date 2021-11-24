@@ -10,7 +10,12 @@ import OSLog
 
 
 class WebSocketDelegate: NSObject, URLSessionWebSocketDelegate {
-    var isConnected = false
+    var isConnected: Bool = false
+    init(isconnect: inout Bool) {
+        self.isConnected = isconnect
+        super.init()
+        
+    }
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol1: String?) {
         isConnected = true
         os_log("连接服务器成功")
@@ -25,22 +30,23 @@ class ChatRoom: Identifiable, ObservableObject {
     
     private let urlSession: URLSession
     static private let url = URL(fileURLWithPath: "ws://114.132.210.203:5002")
-    //static private let url = URL(fileURLWithPath: "ws://127.0.0.1")
+//    static private let url = URL(fileURLWithPath: "ws://127.0.0.1")
     
     private(set) var id: String
     private(set) var currentUserName: String
     private var webSocket: URLSessionWebSocketTask
-    private var webSocketDelegate: WebSocketDelegate
+    var webSocketDelegate: WebSocketDelegate
     @Published var messages: [MsgEntity] = []
+     var isConnected: Bool
     
     init(roomId: String, currentUserName: String) {
         self.id = roomId
         self.currentUserName = currentUserName
-        
-        webSocketDelegate = WebSocketDelegate()
+        isConnected = true
+        webSocketDelegate = WebSocketDelegate(isconnect: &isConnected)
         urlSession = URLSession(configuration: .default, delegate: webSocketDelegate, delegateQueue: OperationQueue())
         webSocket = urlSession.webSocketTask(with: ChatRoom.url)
-        webSocket.resume()        
+        webSocket.resume()
     }
     func joinRoom() {
         let encoder = JSONEncoder()
